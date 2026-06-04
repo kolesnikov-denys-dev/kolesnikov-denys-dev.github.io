@@ -151,7 +151,7 @@ fun SkillsSection() {
                 "Hardware & IoT" to listOf(
                     "BLE", "Wi-Fi", "MQTT", "RTSP", "ESP32", "Arduino", "Texas Instruments Drivers"
                 ),
-                "Frameworks & Arch" to listOf("Native Android", "KMM", "Swift/Xcode", "Flutter", "Clean Architecture", "MVI/MVVM")
+                "Frameworks & Arch" to listOf("Native Android", "KMP", "Swift/Xcode", "Flutter", "Clean Architecture", "MVI/MVVM")
             )
 
             skillGroups.forEach { (group, skills) ->
@@ -223,7 +223,12 @@ fun ProjectsSection() {
                 ProjectCard(
                     title = "Story Door (Native to KMP Migration)",
                     description = "Comprehensive migration of a native Android writing app to Kotlin Multiplatform (KMP). An offline-first tool for writers featuring cross-platform Google synchronization, high scalability for large manuscripts, and EPUB export. Shared business logic with KMM and unified UI using Compose Multiplatform (iOS, Android, Desktop).",
-                    tags = listOf("KMP", "Compose Multiplatform", "Offline-First", "Google Sync", "EPUB Export", "SQLDelight 2.3")
+                    tags = listOf("KMP", "Compose Multiplatform", "Offline-First", "Google Sync", "EPUB Export", "SQLDelight 2.3"),
+                    links = listOf(
+                        "Read Article 1" to "/article1",
+                        "Read Article 2" to "/article2",
+                        "Read Article 3" to "/article3"
+                    )
                 )
                 ProjectCard(
                     title = "AOSP Custom System Services",
@@ -246,10 +251,28 @@ fun ProjectsSection() {
 }
 
 @Composable
-fun ProjectCard(title: String, description: String, tags: List<String>) {
+fun ProjectCard(
+    title: String,
+    description: String,
+    tags: List<String>,
+    links: List<Pair<String, String>> = emptyList()
+) {
     Column(ProjectCardStyle.toModifier().fillMaxHeight()) {
         SpanText(title, Modifier.fontWeight(FontWeight.Bold).fontSize(1.2.cssRem))
         SpanText(description, Modifier.margin(top = 1.cssRem).opacity(0.8).flexGrow(1).lineHeight(1.5))
+        
+        if (links.isNotEmpty()) {
+            Row(Modifier.margin(top = 1.cssRem).gap(1.cssRem).flexWrap(FlexWrap.Wrap)) {
+                links.forEach { (text, url) ->
+                    Link(url) {
+                        Button(onClick = {}, Modifier.fontSize(0.8.cssRem).padding(leftRight = 0.8.cssRem).borderRadius(4.px)) {
+                            Text(text)
+                        }
+                    }
+                }
+            }
+        }
+
         Row(Modifier.margin(top = 1.cssRem).flexWrap(FlexWrap.Wrap)) {
             tags.forEach { tag ->
                 Box(

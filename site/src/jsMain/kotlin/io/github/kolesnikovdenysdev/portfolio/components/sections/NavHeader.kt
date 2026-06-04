@@ -62,7 +62,6 @@ private fun MenuItems() {
     NavLink("#experience", "Experience")
     NavLink("#projects", "Projects")
     NavLink("#contact", "Contact")
-    NavLink("/about", "About Kobweb")
 }
 
 @Composable

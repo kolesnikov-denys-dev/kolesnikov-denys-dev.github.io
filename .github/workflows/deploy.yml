@@ -36,6 +36,16 @@ jobs:
       - name: Export Site
         run: ./gradlew :site:kobwebExport -PkobwebReuseServer=false
 
+      - name: Add .nojekyll and 404.html
+        run: |
+          touch site/.kobweb/site/.nojekyll
+          if [ -d site/.kobweb/site/pages ]; then
+            cp -r site/.kobweb/site/pages/* site/.kobweb/site/
+          fi
+          if [ -f site/.kobweb/site/index.html ]; then
+            cp site/.kobweb/site/index.html site/.kobweb/site/404.html
+          fi
+
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
         with:
