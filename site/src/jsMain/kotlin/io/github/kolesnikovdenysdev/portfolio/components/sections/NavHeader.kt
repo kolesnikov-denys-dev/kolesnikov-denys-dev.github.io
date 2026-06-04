@@ -10,7 +10,6 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.*
-import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.icons.CloseIcon
 import com.varabyte.kobweb.silk.components.icons.HamburgerIcon
 import com.varabyte.kobweb.silk.components.icons.MoonIcon
@@ -22,10 +21,11 @@ import com.varabyte.kobweb.silk.components.overlay.Overlay
 import com.varabyte.kobweb.silk.components.overlay.OverlayVars
 import com.varabyte.kobweb.silk.components.overlay.PopupPlacement
 import com.varabyte.kobweb.silk.components.overlay.Tooltip
+import com.varabyte.kobweb.silk.theme.colors.palette.background
+import com.varabyte.kobweb.silk.theme.colors.palette.toPalette
 import com.varabyte.kobweb.silk.style.CssStyle
 import com.varabyte.kobweb.silk.style.animation.Keyframes
 import com.varabyte.kobweb.silk.style.animation.toAnimation
-import com.varabyte.kobweb.silk.style.base
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.style.breakpoint.displayIfAtLeast
 import com.varabyte.kobweb.silk.style.breakpoint.displayUntil
@@ -35,8 +35,19 @@ import org.jetbrains.compose.web.css.*
 import io.github.kolesnikovdenysdev.portfolio.components.widgets.IconButton
 import io.github.kolesnikovdenysdev.portfolio.toSitePalette
 
-val NavHeaderStyle = CssStyle.base {
-    Modifier.fillMaxWidth().padding(1.cssRem)
+val NavHeaderStyle = CssStyle {
+    base {
+        Modifier
+            .fillMaxWidth()
+            .padding(1.cssRem)
+            .backgroundColor(colorMode.toPalette().background)
+    }
+    Breakpoint.MD {
+        Modifier
+            .position(Position.Sticky)
+            .top(0.px)
+            .zIndex(10)
+    }
 }
 
 @Composable
@@ -46,8 +57,12 @@ private fun NavLink(path: String, text: String) {
 
 @Composable
 private fun MenuItems() {
-    NavLink("/", "Home")
-    NavLink("/about", "About")
+    NavLink("#about", "About Me")
+    NavLink("#skills", "Skills")
+    NavLink("#experience", "Experience")
+    NavLink("#projects", "Projects")
+    NavLink("#contact", "Contact")
+    NavLink("/about", "About Kobweb")
 }
 
 @Composable
@@ -100,29 +115,30 @@ enum class SideMenuState {
 @Composable
 fun NavHeader() {
     Row(NavHeaderStyle.toModifier(), verticalAlignment = Alignment.CenterVertically) {
-        Link("https://kobweb.varabyte.com") {
-            // Block display overrides inline display of the <img> tag, so it calculates centering better
-            Image("/kobweb-logo.png", "Kobweb Logo", Modifier.height(2.cssRem).display(DisplayStyle.Block))
-        }
-
-        Spacer()
-
-        Row(Modifier.gap(1.5.cssRem).displayIfAtLeast(Breakpoint.MD), verticalAlignment = Alignment.CenterVertically) {
-            MenuItems()
+        // Desktop Layout
+        Row(
+            Modifier.fillMaxWidth().displayIfAtLeast(Breakpoint.MD),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Spacer()
+            Row(Modifier.gap(1.5.cssRem)) {
+                MenuItems()
+            }
+            Spacer()
             ColorModeButton()
         }
 
+        // Mobile Layout
         Row(
             Modifier
-                .fontSize(1.5.cssRem)
-                .gap(1.cssRem)
+                .fillMaxWidth()
                 .displayUntil(Breakpoint.MD),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            var menuState by remember { mutableStateOf(SideMenuState.CLOSED) }
-
+            Spacer()
             ColorModeButton()
-            HamburgerButton(onClick =  { menuState = SideMenuState.OPEN })
+            var menuState by remember { mutableStateOf(SideMenuState.CLOSED) }
+            HamburgerButton(onClick = { menuState = SideMenuState.OPEN })
 
             if (menuState != SideMenuState.CLOSED) {
                 SideMenu(

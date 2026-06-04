@@ -1,6 +1,7 @@
 package io.github.kolesnikovdenysdev.portfolio
 
 import com.varabyte.kobweb.compose.css.ScrollBehavior
+import com.varabyte.kobweb.compose.css.Transition
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Colors
@@ -58,6 +59,29 @@ val SubheadlineTextStyle = CssStyle.base {
         .fontSize(1.cssRem)
         .textAlign(TextAlign.Start)
         .color(colorMode.toPalette().color.toRgb().copyf(alpha = 0.8f))
+}
+
+val SectionStyle = CssStyle.base {
+    Modifier
+        .fillMaxWidth()
+        .padding(topBottom = 4.cssRem, leftRight = 2.cssRem)
+        .display(DisplayStyle.Flex)
+        .flexDirection(FlexDirection.Column)
+        .alignItems(AlignItems.Center)
+}
+
+val ContainerStyle = CssStyle.base {
+    Modifier
+        .maxWidth(1100.px)
+        .fillMaxWidth()
+}
+
+val ProjectCardStyle = CssStyle.base {
+    Modifier
+        .padding(1.cssRem)
+        .borderRadius(12.px)
+        .border(1.px, LineStyle.Solid, colorMode.toPalette().color)
+        .transition(Transition.of("transform", 200.ms))
 }
 
 val CircleButtonVariant = ButtonStyle.addVariantBase {
