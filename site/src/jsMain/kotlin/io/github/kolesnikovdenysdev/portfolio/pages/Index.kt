@@ -219,7 +219,7 @@ fun ProjectsSection() {
     Box(SectionStyle.toModifier().id("projects")) {
         Column(ContainerStyle.toModifier()) {
             SpanText("🎉 Personal Projects", HeadlineTextStyle.toModifier().fontSize(2.cssRem))
-            SimpleGrid(numColumns(1, md = 2), Modifier.fillMaxWidth().margin(top = 2.cssRem).gap(1.cssRem)) {
+            Column(Modifier.fillMaxWidth().margin(top = 2.cssRem).gap(1.5.cssRem)) {
                 ProjectCard(
                     title = "Story Door (Native to KMP Migration)",
                     description = "Comprehensive migration of a native Android writing app to Kotlin Multiplatform (KMP). An offline-first tool for writers featuring cross-platform Google synchronization, high scalability for large manuscripts, and EPUB export. Shared business logic with KMM and unified UI using Compose Multiplatform (iOS, Android, Desktop).",
@@ -257,9 +257,9 @@ fun ProjectCard(
     tags: List<String>,
     links: List<Pair<String, String>> = emptyList()
 ) {
-    Column(ProjectCardStyle.toModifier().fillMaxHeight()) {
+    Column(ProjectCardStyle.toModifier().fillMaxWidth()) {
         SpanText(title, Modifier.fontWeight(FontWeight.Bold).fontSize(1.2.cssRem))
-        SpanText(description, Modifier.margin(top = 1.cssRem).opacity(0.8).flexGrow(1).lineHeight(1.5))
+        SpanText(description, Modifier.margin(top = 1.cssRem).opacity(0.8).lineHeight(1.5))
         
         if (links.isNotEmpty()) {
             Row(Modifier.margin(top = 1.cssRem).gap(1.cssRem).flexWrap(FlexWrap.Wrap)) {
