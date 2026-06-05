@@ -248,7 +248,8 @@ fun ProjectsSection() {
                         "Read Article 1" to "/article1",
                         "Read Article 2" to "/article2",
                         "Read Article 3" to "/article3"
-                    )
+                    ),
+                    note = "The repository is private. I can demonstrate the code and discuss architectural decisions during an interview."
                 )
                 ProjectCard(
                     title = "Movie Note (Android Native)",
@@ -292,7 +293,8 @@ fun ProjectCard(
     tags: List<String>,
     status: String? = null,
     difficulty: String? = null,
-    links: List<Pair<String, String>> = emptyList()
+    links: List<Pair<String, String>> = emptyList(),
+    note: String? = null
 ) {
     Column(ProjectCardStyle.toModifier().fillMaxWidth()) {
         SpanText(title, Modifier.fontWeight(FontWeight.Bold).fontSize(1.2.cssRem))
@@ -321,6 +323,23 @@ fun ProjectCard(
                 val isLight = ColorMode.current.isLight
                 val difficultyColor = if (isLight) com.varabyte.kobweb.compose.ui.graphics.Color.rgb(160, 110, 0) else Colors.Gold
                 SpanText(difficulty, Modifier.fontSize(0.8.cssRem).fontWeight(FontWeight.Bold).color(difficultyColor))
+            }
+        }
+
+        if (note != null) {
+            Box(
+                Modifier
+                    .margin(top = 1.cssRem)
+                    .padding(all = 0.8.cssRem)
+                    .backgroundColor(Colors.Orange.copyf(alpha = 0.05f))
+                    .borderRadius(8.px)
+                    .border(1.px, LineStyle.Dashed, Colors.Orange.copyf(alpha = 0.3f))
+                    .fillMaxWidth()
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    SpanText("🔒 ", Modifier.fontSize(1.1.cssRem))
+                    SpanText(note, Modifier.fontSize(0.85.cssRem).opacity(0.9).lineHeight(1.4))
+                }
             }
         }
 
