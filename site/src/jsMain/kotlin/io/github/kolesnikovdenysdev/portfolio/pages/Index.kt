@@ -226,7 +226,7 @@ fun ProjectsSection() {
                 ProjectCard(
                     title = "AOSP Custom System Services",
                     description = "Implementation of custom system services and hardware drivers (Qualcomm) for industrial Android devices, including root-level applications and MDM.",
-                    tags = listOf("AOSP", "Qualcomm", "C/C++", "Java", "Kotlin")
+                    tags = listOf("AOSP", "Qualcomm", "C/C++", "Java")
                 )
                 ProjectCard(
                     title = "Touchscreen Mini-Computers",
@@ -245,8 +245,9 @@ fun ProjectsSection() {
                 ProjectCard(
                     title = "Story Door (Android Native to KMP Migration: iOS, Android, Desktop)",
                     status = "Since May 2021 • In Active Development",
-                    description = "Comprehensive migration of a native Android writing app to Kotlin Multiplatform (KMP). An offline-first tool for writers featuring cross-platform Google synchronization, high scalability for large manuscripts, and EPUB export. Shared business logic with KMM and unified UI using Compose Multiplatform (iOS, Android, Desktop).",
-                    tags = listOf("KMP", "Compose Multiplatform", "Offline-First", "Google Sync", "EPUB Export", "SQLDelight 2.3"),
+                    difficulty = "Expert / Architectural Lead",
+                    description = "Comprehensive migration of a native Android writing app to Kotlin Multiplatform (KMP). Built with Clean Architecture and Feature-Based modularization. An offline-first tool for writers featuring Native Google Sign-In and cross-platform synchronization via Google Drive API. Implementation includes HTML parsing with Ksoup, advanced UI with Reorderable/Krop, and unified logic using Koin & Ktor.",
+                    tags = listOf("Kotlin", "KMP", "Compose Multiplatform", "Google Drive API", "Google Sign-In", "Ktor", "SQLDelight", "Koin", "Coil", "FileKit", "KmpAuth", "Ksoup", "Krop", "Reorderable", "Clean Architecture", "Feature Based Architecture"),
                     links = listOf(
                         "Read Article 1" to "/article1",
                         "Read Article 2" to "/article2",
@@ -256,6 +257,7 @@ fun ProjectsSection() {
                 ProjectCard(
                     title = "Movie Note (Android Native)",
                     status = "Nov 2020 • Completed",
+                    difficulty = "Medium",
                     description = "An Android Native movie notes application built with Java and MVVM architecture. It integrates with TMDb API for movie data and uses Firebase for authentication and cloud storage. Features include reactive programming with RxJava, dependency injection with Dagger 2, and smooth image loading with Glide.",
                     tags = listOf("Java", "MVVM", "Firebase", "Retrofit", "Dagger 2", "RxJava", "Glide", "Paging", "Material Design"),
                     links = listOf(
@@ -265,6 +267,7 @@ fun ProjectsSection() {
                 ProjectCard(
                     title = "Unsplash Wallpapers (Android Native)",
                     status = "2019 • Completed",
+                    difficulty = "Medium",
                     description = "An Android Native application developed to demonstrate technical skills. It allows users to search, view, and set high-quality images from the Unsplash API as wallpapers. Features include advanced image searching, zooming, and local downloading.",
                     tags = listOf("Java", "MVP", "Retrofit", "RxJava", "Room", "Picasso", "PhotoView", "Material Design"),
                     links = listOf(
@@ -272,8 +275,9 @@ fun ProjectsSection() {
                     )
                 )
                 ProjectCard(
-                    title = "Web Store (Java Enterprise)",
+                    title = "Web Store (Full-stack: Java Backend & Web Frontend)",
                     status = "Nov 2017 • Completed",
+                    difficulty = "Core Fundamentals",
                     description = "A full-stack e-commerce platform (Amazon clone) for buying and selling products. Developed as a graduation project for a Java Enterprise course, covering both frontend (HTML/CSS) and backend logic with Java Servlets and MySQL.",
                     tags = listOf("Java", "Java Servlets", "MySQL", "HTML/CSS"),
                     links = listOf(
@@ -291,6 +295,7 @@ fun ProjectCard(
     description: String,
     tags: List<String>,
     status: String? = null,
+    difficulty: String? = null,
     links: List<Pair<String, String>> = emptyList()
 ) {
     Column(ProjectCardStyle.toModifier().fillMaxWidth()) {
@@ -313,6 +318,16 @@ fun ProjectCard(
                 }
             }
         }
+
+        if (difficulty != null) {
+            Row(Modifier.margin(top = 0.5.cssRem), verticalAlignment = Alignment.CenterVertically) {
+                SpanText("Complexity: ", Modifier.fontSize(0.8.cssRem).opacity(0.6))
+                val isLight = ColorMode.current.isLight
+                val difficultyColor = if (isLight) com.varabyte.kobweb.compose.ui.graphics.Color.rgb(160, 110, 0) else Colors.Gold
+                SpanText(difficulty, Modifier.fontSize(0.8.cssRem).fontWeight(FontWeight.Bold).color(difficultyColor))
+            }
+        }
+
         SpanText(description, Modifier.margin(top = 1.cssRem).opacity(0.8).lineHeight(1.5))
         
         if (links.isNotEmpty()) {
@@ -332,19 +347,50 @@ fun ProjectCard(
         }
 
         Row(Modifier.margin(top = 1.cssRem).flexWrap(FlexWrap.Wrap)) {
+            val isLight = ColorMode.current.isLight
             tags.forEach { tag ->
+                val (bgColor, textColor) = getTagColors(tag, isLight)
                 Box(
                     Modifier
-                        .padding(topBottom = 0.2.cssRem, leftRight = 0.6.cssRem)
+                        .padding(leftRight = 0.6.cssRem, topBottom = 0.2.cssRem)
                         .margin(right = 0.5.cssRem, bottom = 0.5.cssRem)
-                        .backgroundColor(Colors.LightGray.copyf(alpha = 0.1f))
+                        .backgroundColor(bgColor)
                         .borderRadius(4.px)
+                        .border(1.px, LineStyle.Solid, textColor.copyf(alpha = if (isLight) 0.4f else 0.3f))
                 ) {
-                    SpanText(tag, Modifier.fontSize(0.75.cssRem).opacity(0.7))
+                    SpanText(tag, Modifier.fontSize(0.75.cssRem).color(textColor).fontWeight(FontWeight.Medium))
                 }
             }
         }
     }
+}
+
+fun getTagColors(tag: String, isLight: Boolean): Pair<com.varabyte.kobweb.compose.ui.graphics.Color.Rgb, com.varabyte.kobweb.compose.ui.graphics.Color.Rgb> {
+    val tagLower = tag.lowercase()
+    val baseColor = when {
+        tagLower.contains("kmp") || tagLower.contains("multiplatform") || tagLower.contains("kotlin") -> Colors.Indigo
+        tagLower.contains("compose") -> Colors.Teal
+        tagLower.contains("java") && !tagLower.contains("rx") -> if (isLight) Colors.Brown else Colors.OrangeRed
+        tagLower.contains("firebase") -> if (isLight) com.varabyte.kobweb.compose.ui.graphics.Color.rgb(191, 118, 0) else Colors.Orange
+        tagLower.contains("sqldelight") || tagLower.contains("sql") -> Colors.DodgerBlue
+        tagLower.contains("ktor") || tagLower.contains("ksoup") -> Colors.SkyBlue
+        tagLower.contains("koin") -> Colors.MediumOrchid
+        tagLower.contains("coil") || tagLower.contains("filekit") -> Colors.LightCoral
+        tagLower.contains("krop") || tagLower.contains("reorderable") || tagLower.contains("kmpauth") -> Colors.DarkOrange
+        tagLower.contains("rxjava") -> Colors.Purple
+        tagLower.contains("dagger") -> Colors.RoyalBlue
+        tagLower.contains("retrofit") -> if (isLight) Colors.DarkGreen else Colors.ForestGreen
+        tagLower.contains("mvvm") || tagLower.contains("mvp") -> if (isLight) Colors.DarkSlateGray else Colors.SlateGray
+        tagLower.contains("clean") -> if (isLight) Colors.DarkCyan else Colors.DarkCyan
+        tagLower.contains("aosp") || tagLower.contains("qualcomm") -> if (isLight) Colors.FireBrick else Colors.DarkRed
+        tagLower.contains("arduino") || tagLower.contains("esp32") -> if (isLight) Colors.DarkGreen else Colors.DarkGreen
+        else -> Colors.Gray
+    }
+    
+    val bgColor = baseColor.toRgb().copyf(alpha = if (isLight) 0.08f else 0.12f)
+    val textColor = baseColor.toRgb()
+    
+    return bgColor to textColor
 }
 
 @Composable
