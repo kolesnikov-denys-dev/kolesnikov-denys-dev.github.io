@@ -3,6 +3,8 @@ package io.github.kolesnikovdenysdev.portfolio.pages
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.FontWeight
 import com.varabyte.kobweb.compose.css.TextAlign
+import com.varabyte.kobweb.compose.css.TextDecorationLine
+import com.varabyte.kobweb.compose.css.WhiteSpace
 import org.jetbrains.compose.web.css.FlexWrap
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
@@ -102,6 +104,7 @@ fun AboutMeSection() {
                     val achievements = listOf(
                         "Created and published 'Story Door' from idea to release on Play Market",
                         "Migrated 'Story Door' from a native Android project to a full Kotlin Multiplatform (KMP) & Compose Multiplatform (iOS, Android, Desktop) architecture",
+                        "Completed an intensive 6-month Java Enterprise course, building a full-stack e-commerce platform (2017)",
                         "Collaborated with large, cross-functional teams",
                         "Presented findings at meetups on AOSP-based solutions",
                         "Provided mentorship and guidance to fellow developers"
@@ -218,18 +221,8 @@ fun ExperienceItem(title: String, description: String) {
 fun ProjectsSection() {
     Box(SectionStyle.toModifier().id("projects")) {
         Column(ContainerStyle.toModifier()) {
-            SpanText("🎉 Personal Projects", HeadlineTextStyle.toModifier().fontSize(2.cssRem))
-            Column(Modifier.fillMaxWidth().margin(top = 2.cssRem).gap(1.5.cssRem)) {
-                ProjectCard(
-                    title = "Story Door (Native to KMP Migration)",
-                    description = "Comprehensive migration of a native Android writing app to Kotlin Multiplatform (KMP). An offline-first tool for writers featuring cross-platform Google synchronization, high scalability for large manuscripts, and EPUB export. Shared business logic with KMM and unified UI using Compose Multiplatform (iOS, Android, Desktop).",
-                    tags = listOf("KMP", "Compose Multiplatform", "Offline-First", "Google Sync", "EPUB Export", "SQLDelight 2.3"),
-                    links = listOf(
-                        "Read Article 1" to "/article1",
-                        "Read Article 2" to "/article2",
-                        "Read Article 3" to "/article3"
-                    )
-                )
+            SpanText("💼 Commercial Projects", HeadlineTextStyle.toModifier().fontSize(2.cssRem))
+            Column(Modifier.fillMaxWidth().margin(top = 2.cssRem, bottom = 3.cssRem).gap(1.5.cssRem)) {
                 ProjectCard(
                     title = "AOSP Custom System Services",
                     description = "Implementation of custom system services and hardware drivers (Qualcomm) for industrial Android devices, including root-level applications and MDM.",
@@ -246,6 +239,48 @@ fun ProjectsSection() {
                     tags = listOf("IoT", "ESP32", "BLE", "Wi-Fi")
                 )
             }
+
+            SpanText("🎉 Personal Projects", HeadlineTextStyle.toModifier().fontSize(2.cssRem))
+            Column(Modifier.fillMaxWidth().margin(top = 2.cssRem).gap(1.5.cssRem)) {
+                ProjectCard(
+                    title = "Story Door (Android Native to KMP Migration: iOS, Android, Desktop)",
+                    status = "Since May 2021 • In Active Development",
+                    description = "Comprehensive migration of a native Android writing app to Kotlin Multiplatform (KMP). An offline-first tool for writers featuring cross-platform Google synchronization, high scalability for large manuscripts, and EPUB export. Shared business logic with KMM and unified UI using Compose Multiplatform (iOS, Android, Desktop).",
+                    tags = listOf("KMP", "Compose Multiplatform", "Offline-First", "Google Sync", "EPUB Export", "SQLDelight 2.3"),
+                    links = listOf(
+                        "Read Article 1" to "/article1",
+                        "Read Article 2" to "/article2",
+                        "Read Article 3" to "/article3"
+                    )
+                )
+                ProjectCard(
+                    title = "Movie Note (Android Native)",
+                    status = "Nov 2020 • Completed",
+                    description = "An Android Native movie notes application built with Java and MVVM architecture. It integrates with TMDb API for movie data and uses Firebase for authentication and cloud storage. Features include reactive programming with RxJava, dependency injection with Dagger 2, and smooth image loading with Glide.",
+                    tags = listOf("Java", "MVVM", "Firebase", "Retrofit", "Dagger 2", "RxJava", "Glide", "Paging", "Material Design"),
+                    links = listOf(
+                        "View on GitHub" to "https://github.com/kolesnikov-denys-dev/Movie-Note"
+                    )
+                )
+                ProjectCard(
+                    title = "Unsplash Wallpapers (Android Native)",
+                    status = "2019 • Completed",
+                    description = "An Android Native application developed to demonstrate technical skills. It allows users to search, view, and set high-quality images from the Unsplash API as wallpapers. Features include advanced image searching, zooming, and local downloading.",
+                    tags = listOf("Java", "MVP", "Retrofit", "RxJava", "Room", "Picasso", "PhotoView", "Material Design"),
+                    links = listOf(
+                        "View on GitHub" to "https://github.com/kolesnikov-denys-dev/Unsplash-Wallpapers"
+                    )
+                )
+                ProjectCard(
+                    title = "Web Store (Java Enterprise)",
+                    status = "Nov 2017 • Completed",
+                    description = "A full-stack e-commerce platform (Amazon clone) for buying and selling products. Developed as a graduation project for a Java Enterprise course, covering both frontend (HTML/CSS) and backend logic with Java Servlets and MySQL.",
+                    tags = listOf("Java", "Java Servlets", "MySQL", "HTML/CSS"),
+                    links = listOf(
+                        "View on GitHub" to "https://github.com/kolesnikov-denys-dev/Web-Shop-Servlets"
+                    )
+                )
+            }
         }
     }
 }
@@ -255,17 +290,40 @@ fun ProjectCard(
     title: String,
     description: String,
     tags: List<String>,
+    status: String? = null,
     links: List<Pair<String, String>> = emptyList()
 ) {
     Column(ProjectCardStyle.toModifier().fillMaxWidth()) {
-        SpanText(title, Modifier.fontWeight(FontWeight.Bold).fontSize(1.2.cssRem))
+        Row(Modifier.fillMaxWidth().flexWrap(FlexWrap.Wrap).columnGap(1.cssRem).rowGap(0.5.cssRem), verticalAlignment = Alignment.CenterVertically) {
+            SpanText(title, Modifier.fontWeight(FontWeight.Bold).fontSize(1.2.cssRem))
+            if (status != null) {
+                val statusColor = when {
+                    status.contains("Completed") -> Colors.Crimson
+                    status.contains("Active Development") -> Colors.MediumSeaGreen
+                    else -> Colors.DodgerBlue
+                }
+                Box(
+                    Modifier
+                        .padding(leftRight = 0.5.cssRem, topBottom = 0.2.cssRem)
+                        .backgroundColor(statusColor.copyf(alpha = 0.1f))
+                        .borderRadius(4.px)
+                        .whiteSpace(WhiteSpace.NoWrap)
+                ) {
+                    SpanText(status, Modifier.fontSize(0.7.cssRem).color(statusColor).fontWeight(FontWeight.Bold))
+                }
+            }
+        }
         SpanText(description, Modifier.margin(top = 1.cssRem).opacity(0.8).lineHeight(1.5))
         
         if (links.isNotEmpty()) {
             Row(Modifier.margin(top = 1.cssRem).gap(1.cssRem).flexWrap(FlexWrap.Wrap)) {
                 links.forEach { (text, url) ->
-                    Link(url) {
-                        Button(onClick = {}, Modifier.fontSize(0.8.cssRem).padding(leftRight = 0.8.cssRem).borderRadius(4.px)) {
+                    Link(url, Modifier.textDecorationLine(TextDecorationLine.None)) {
+                        Button(
+                            onClick = {},
+                            variant = ProjectLinkVariant,
+                            modifier = Modifier.fontSize(0.8.cssRem)
+                        ) {
                             Text(text)
                         }
                     }

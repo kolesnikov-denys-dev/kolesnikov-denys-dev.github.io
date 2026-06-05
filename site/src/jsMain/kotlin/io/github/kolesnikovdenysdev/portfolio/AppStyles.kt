@@ -1,5 +1,6 @@
 package io.github.kolesnikovdenysdev.portfolio
 
+import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.compose.css.ScrollBehavior
 import com.varabyte.kobweb.compose.css.Transition
 import com.varabyte.kobweb.compose.css.TextAlign
@@ -12,9 +13,8 @@ import com.varabyte.kobweb.silk.components.layout.HorizontalDividerStyle
 import com.varabyte.kobweb.silk.init.InitSilk
 import com.varabyte.kobweb.silk.init.InitSilkContext
 import com.varabyte.kobweb.silk.init.registerStyleBase
-import com.varabyte.kobweb.silk.style.CssStyle
-import com.varabyte.kobweb.silk.style.addVariantBase
-import com.varabyte.kobweb.silk.style.base
+import com.varabyte.kobweb.silk.style.*
+import com.varabyte.kobweb.silk.style.selectors.hover
 import com.varabyte.kobweb.silk.theme.colors.palette.color
 import com.varabyte.kobweb.silk.theme.colors.palette.toPalette
 import com.varabyte.kobweb.silk.theme.modifyStyleBase
@@ -90,4 +90,22 @@ val CircleButtonVariant = ButtonStyle.addVariantBase {
 
 val UncoloredButtonVariant = ButtonStyle.addVariantBase {
     Modifier.setVariable(ButtonVars.BackgroundDefaultColor, Colors.Transparent)
+}
+
+val ProjectLinkVariant = ButtonStyle.addVariant {
+    base {
+        Modifier
+            .backgroundColor(Colors.Transparent)
+            .border(1.px, LineStyle.Solid, Colors.DodgerBlue)
+            .color(Colors.DodgerBlue)
+            .borderRadius(6.px)
+            .padding(leftRight = 1.cssRem, topBottom = 0.4.cssRem)
+            .transition(Transition.of("all", 0.2.s))
+    }
+    hover {
+        Modifier
+            .backgroundColor(Colors.DodgerBlue)
+            .color(Colors.White)
+            .cursor(Cursor.Pointer)
+    }
 }
