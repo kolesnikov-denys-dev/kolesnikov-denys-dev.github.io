@@ -135,26 +135,22 @@ fun SkillsSection() {
             SpanText("🛠️ Tech Stack & Tools", HeadlineTextStyle.toModifier().fontSize(2.cssRem))
 
             val skillGroups = mapOf(
+                "Primary Expertise (7+ Years)" to listOf("Kotlin", "Java", "Android Native", "SQL", "Clean Architecture"),
+                "Kotlin Multiplatform (KMP)" to listOf(
+                    "KMP", "Compose Multiplatform", "Ktor", "SQLDelight", "Koin", "KmpAuth", "FileKit", "Coil 3"
+                ),
                 "AOSP & OS Development" to listOf(
-                    "Custom Launchers", "Notification Shades", "OTA Updates", "System Services", 
-                    "Qualcomm Drivers", "MDM Services", "Root-level Apps"
+                    "Custom Launchers", "System Services", "Qualcomm Drivers", "MDM Services", "OTA Updates", "Root-level Apps"
                 ),
-                "Compose Multiplatform" to listOf(
-                    "Compose 1.11", "Navigation Compose", "Resources", "Resources UI Tooling", 
-                    "Material 3", "Foundation", "Coil 3", "FileKit", "Krop", "Reorderable"
+                "Hardware & Industrial IoT" to listOf(
+                    "Arduino", "ESP32", "HMI Development", "PCB Design", "Automation Logic", "BLE", "MQTT", "RTSP"
                 ),
-                "Networking & Data" to listOf(
-                    "Ktor 3.5", "SQLDelight 2.3", "Protobuf", "Ksoup (HTML Parsing)", 
-                    "Kotlinx Serialization", "Kotlinx DateTime", "Kotlinx IO"
+                "Other Languages & Frameworks" to listOf(
+                    "Dart", "Flutter", "JavaScript", "Python", "Django", "Swift/Xcode"
                 ),
-                "DI & Auth" to listOf(
-                    "Koin 4.2", "KMPAuth", "Android Credentials API", "Google Play Auth", 
-                    "Firebase Analytics/Crashlytics"
-                ),
-                "Hardware & IoT" to listOf(
-                    "BLE", "Wi-Fi", "MQTT", "RTSP", "ESP32", "Arduino", "Texas Instruments Drivers"
-                ),
-                "Frameworks & Arch" to listOf("Native Android", "KMP", "Swift/Xcode", "Flutter", "Clean Architecture", "MVI/MVVM")
+                "Architecture & Patterns" to listOf(
+                    "Feature Based Architecture", "MVI/MVVM", "Dependency Injection", "Reactive Programming", "TDD"
+                )
             )
 
             skillGroups.forEach { (group, skills) ->
@@ -171,19 +167,17 @@ fun SkillsSection() {
 
 @Composable
 fun SkillTag(name: String) {
-    val palette = ColorMode.current.toPalette()
     val isLight = ColorMode.current.isLight
-    val borderColor = palette.color.toRgb().copyf(alpha = if (isLight) 0.2f else 0.25f)
-    val bgColor = palette.color.toRgb().copyf(alpha = if (isLight) 0.07f else 0.12f)
+    val (bgColor, textColor) = getTagColors(name, isLight)
     Box(
         Modifier
             .padding(topBottom = 0.4.cssRem, leftRight = 0.8.cssRem)
             .margin(0.3.cssRem)
             .backgroundColor(bgColor)
-            .borderRadius(20.px)
-            .border(1.px, LineStyle.Solid, borderColor)
+            .borderRadius(4.px)
+            .border(1.px, LineStyle.Solid, textColor.copyf(alpha = if (isLight) 0.4f else 0.3f))
     ) {
-        SpanText(name, Modifier.fontSize(0.85.cssRem).fontWeight(FontWeight.Medium))
+        SpanText(name, Modifier.fontSize(0.85.cssRem).color(textColor).fontWeight(FontWeight.Medium))
     }
 }
 
@@ -229,9 +223,11 @@ fun ProjectsSection() {
                     tags = listOf("AOSP", "Qualcomm", "C/C++", "Java")
                 )
                 ProjectCard(
-                    title = "Touchscreen Mini-Computers",
-                    description = "Arduino-based systems with touchscreen UIs for power electronics control. Embedded hardware tinkering.",
-                    tags = listOf("Arduino", "C++", "Electronics")
+                    title = "Industrial HMI & Control System: Drying Equipment Automation",
+                    status = "Dec 2018 • Completed",
+                    difficulty = "Project Lead & Hardware Engineer",
+                    description = "Led the end-to-end development of 10 industrial control units. Designed custom PCBs and cabinet-mounted touchscreen HMIs, and engineered the full process automation logic to manage high-power centrifugal blowers and heating elements. Features include a time-based task scheduler for automated shutdown, real-time sensor data acquisition, and a multi-language localization system.",
+                    tags = listOf("Arduino", "C++", "Automation Logic", "HMI Development", "PCB Design", "Industrial Automation", "Team Leadership", "Task Scheduling")
                 )
                 ProjectCard(
                     title = "Smart Home Gadgets",
@@ -299,23 +295,23 @@ fun ProjectCard(
     links: List<Pair<String, String>> = emptyList()
 ) {
     Column(ProjectCardStyle.toModifier().fillMaxWidth()) {
-        Row(Modifier.fillMaxWidth().flexWrap(FlexWrap.Wrap).columnGap(1.cssRem).rowGap(0.5.cssRem), verticalAlignment = Alignment.CenterVertically) {
-            SpanText(title, Modifier.fontWeight(FontWeight.Bold).fontSize(1.2.cssRem))
-            if (status != null) {
-                val statusColor = when {
-                    status.contains("Completed") -> Colors.Crimson
-                    status.contains("Active Development") -> Colors.MediumSeaGreen
-                    else -> Colors.DodgerBlue
-                }
-                Box(
-                    Modifier
-                        .padding(leftRight = 0.5.cssRem, topBottom = 0.2.cssRem)
-                        .backgroundColor(statusColor.copyf(alpha = 0.1f))
-                        .borderRadius(4.px)
-                        .whiteSpace(WhiteSpace.NoWrap)
-                ) {
-                    SpanText(status, Modifier.fontSize(0.7.cssRem).color(statusColor).fontWeight(FontWeight.Bold))
-                }
+        SpanText(title, Modifier.fontWeight(FontWeight.Bold).fontSize(1.2.cssRem))
+        
+        if (status != null) {
+            val statusColor = when {
+                status.contains("Completed") -> if (ColorMode.current.isLight) Colors.Crimson else Colors.LightCoral
+                status.contains("Active Development") -> if (ColorMode.current.isLight) Colors.DarkGreen else Colors.MediumSeaGreen
+                else -> Colors.DodgerBlue
+            }
+            Box(
+                Modifier
+                    .margin(top = 0.4.cssRem)
+                    .padding(leftRight = 0.5.cssRem, topBottom = 0.2.cssRem)
+                    .backgroundColor(statusColor.toRgb().copyf(alpha = 0.1f))
+                    .borderRadius(4.px)
+                    .whiteSpace(WhiteSpace.NoWrap)
+            ) {
+                SpanText(status, Modifier.fontSize(0.7.cssRem).color(statusColor).fontWeight(FontWeight.Bold))
             }
         }
 
@@ -372,6 +368,10 @@ fun getTagColors(tag: String, isLight: Boolean): Pair<com.varabyte.kobweb.compos
         tagLower.contains("compose") -> Colors.Teal
         tagLower.contains("java") && !tagLower.contains("rx") -> if (isLight) Colors.Brown else Colors.OrangeRed
         tagLower.contains("firebase") -> if (isLight) com.varabyte.kobweb.compose.ui.graphics.Color.rgb(191, 118, 0) else Colors.Orange
+        tagLower.contains("flutter") || tagLower == "dart" -> Colors.DeepSkyBlue
+        tagLower == "javascript" || tagLower == "js" -> if (isLight) com.varabyte.kobweb.compose.ui.graphics.Color.rgb(180, 160, 0) else Colors.Yellow
+        tagLower == "python" -> Colors.SteelBlue
+        tagLower == "django" -> if (isLight) Colors.DarkGreen else Colors.MediumSeaGreen
         tagLower.contains("sqldelight") || tagLower.contains("sql") -> Colors.DodgerBlue
         tagLower.contains("ktor") || tagLower.contains("ksoup") -> Colors.SkyBlue
         tagLower.contains("koin") -> Colors.MediumOrchid
