@@ -245,7 +245,7 @@ fun ProjectsSection() {
                 ProjectCard(
                     title = "Story Door (Android Native to KMP Migration: iOS, Android, Desktop)",
                     status = "Since May 2021 • In Active Development",
-                    difficulty = "Expert / Architectural Lead",
+                    difficulty = "Android Expert / Architectural Lead",
                     description = "Comprehensive migration of a native Android writing app to Kotlin Multiplatform (KMP). Built with Clean Architecture and Feature-Based modularization. An offline-first tool for writers featuring Native Google Sign-In and cross-platform synchronization via Google Drive API. Implementation includes HTML parsing with Ksoup, advanced UI with Reorderable/Krop, and unified logic using Koin & Ktor.",
                     tags = listOf("Kotlin", "KMP", "Compose Multiplatform", "Google Drive API", "Google Sign-In", "Ktor", "SQLDelight", "Koin", "Coil", "FileKit", "KmpAuth", "Ksoup", "Krop", "Reorderable", "Clean Architecture", "Feature Based Architecture"),
                     links = listOf(
@@ -257,7 +257,7 @@ fun ProjectsSection() {
                 ProjectCard(
                     title = "Movie Note (Android Native)",
                     status = "Nov 2020 • Completed",
-                    difficulty = "Medium",
+                    difficulty = "Android Medium",
                     description = "An Android Native movie notes application built with Java and MVVM architecture. It integrates with TMDb API for movie data and uses Firebase for authentication and cloud storage. Features include reactive programming with RxJava, dependency injection with Dagger 2, and smooth image loading with Glide.",
                     tags = listOf("Java", "MVVM", "Firebase", "Retrofit", "Dagger 2", "RxJava", "Glide", "Paging", "Material Design"),
                     links = listOf(
@@ -267,7 +267,7 @@ fun ProjectsSection() {
                 ProjectCard(
                     title = "Unsplash Wallpapers (Android Native)",
                     status = "2019 • Completed",
-                    difficulty = "Medium",
+                    difficulty = "Android Fundamentals",
                     description = "An Android Native application developed to demonstrate technical skills. It allows users to search, view, and set high-quality images from the Unsplash API as wallpapers. Features include advanced image searching, zooming, and local downloading.",
                     tags = listOf("Java", "MVP", "Retrofit", "RxJava", "Room", "Picasso", "PhotoView", "Material Design"),
                     links = listOf(
